@@ -1,21 +1,17 @@
 package gr.com.monolit.app;
 
-import gr.com.monolit.app.feignClients.GreetingClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
+import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
 import org.springframework.cloud.netflix.feign.EnableFeignClients;
-import org.springframework.cloud.netflix.hystrix.dashboard.EnableHystrixDashboard;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @SpringBootApplication
-@EnableEurekaClient
 @EnableFeignClients
+@EnableCircuitBreaker
 @RestController
-@EnableHystrixDashboard
 public class Application {
 
     public static void main(String[] args) {
@@ -24,11 +20,16 @@ public class Application {
 
 
     @Autowired
-    private GreetingClient greetingClient;
+    private MicroCloudClient microCloudClient;
 
     @RequestMapping("/get-greeting")
     public String greeting() {
-        return greetingClient.greeting();
+        return microCloudClient.greeting();
+    }
+
+    @RequestMapping("/get-fake")
+    public String faking() {
+        return microCloudClient.fake();
     }
 
 }
